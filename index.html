@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Dashboard</title>
+</head>
+<body>
+     <header class="text-gray-600 body-font">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+          <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            <span class="ml-3 text-xl">Simi's Bank & Co.</span>
+          </a>
+          <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
+            <a class="mr-5 hover:text-gray-900">About Us</a>
+            <a class="mr-5 hover:text-gray-900">Loan</a>
+            <a class="mr-5 hover:text-gray-900">Open An Account</a>
+            <a class="mr-5 hover:text-gray-900">Contact</a>
+          </nav>
+          <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Hello Sayandeep
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+    <section class="text-gray-600 body-font relative">
+        <div class="absolute inset-0 bg-gray-300">
+          <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.4);"></iframe>
+        </div>
+        <div class="container px-5 py-24 mx-auto flex">
+          <div class="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md">
+            <h2 class="text-2xl font-bold text-gray-900 ">Fund Transfer</h2>
+            <br>
+            <p class="leading-relaxed mb-5 text-gray-600">Using Blockchain to authenticate all transaction</p>
+            <div class="relative mb-4">
+              <label for="email" class="leading-7 text-sm text-gray-600">Enter the amount</label>
+              <input type="text" id="amount" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            </div>
+            
+             
+            <div class="space-x-4">
+            <button class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" id="withdraw">Withdraw</button>
+            <button class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" id="deposit">Deposit</button>
+        </div>
+        <br>
+        <div class=" "space-x-4></div>
+        <p class="text-2xl font-bold text-gray-900 ">Hello User Your Balance is: ₹<span  id="balance"></span></p>
+        <br>
+            <p class="leading-relaxed mb-5 text-gray-600" id="transaction-hash"></p>
+          </div>
+        </div>
+      </section>
+    
+    <!-- <div>
+        <input type="text" id="amount">
+        <p id="balance"></p>
+        <button id="withdraw">Withdraw</button>
+        <button id="deposit">Deposit</button>
+    </div> -->
+    <script src="
+https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js
+"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.slim.js" crossorigin="anonymous"></script>
+ 
+<script>
+    var contract;
+    $(document).ready(function()
+    {
+        web3 =new Web3(web3.currentProvider);
+
+        var address="0xc2F054a5D932fd68a7e2F26b9f7627a8679759fd";
+        var abi= [
+        {
+            "inputs": [
+                {
+                    "internalType": "int256",
+                    "name": "amt",
+                    "type": "int256"
+                }
+            ],
+            "name": "deposit",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "int256",
+                    "name": "amt",
+                    "type": "int256"
+                }
+            ],
+            "name": "withdraw",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getBalance",
+            "outputs": [
+                {
+                    "internalType": "int256",
+                    "name": "",
+                    "type": "int256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ];
+
+        contract=new web3.eth.Contract(abi,address);
+
+        contract.methods.getBalance().call().then(function(bal){
+            $('#balance').html(bal);
+        })
+
+    })
+
+
+    $('#deposit').click(function(){
+        var amt=0;
+        amt=parseInt($('#amount').val());
+
+        web3.eth.getAccounts().then(function(accounts){
+            var acc = accounts[0];
+            return contract.methods.deposit(amt).send({from: acc});
+        }).then(function(tx){
+            console.log("Transaction hash: " + tx.transactionHash);
+        }).catch(function(tx){
+            console.log(tx);
+        })
+    })
+
+    $('#withdraw').click(function(){
+        var amt=0;
+        amt=parseInt($('#amount').val());
+
+        web3.eth.getAccounts().then(function(accounts){
+            var acc = accounts[0];
+            return contract.methods.withdraw(amt).send({from: acc});
+        }).then(function(tx){
+            console.log("Transaction hash: " + tx.transactionHash);
+        }).catch(function(tx){
+            console.log(tx);
+        })
+    })
+
+</script>
+</body>
+</html>
